@@ -202,3 +202,37 @@ curl -X POST http://localhost:<port>/users/login \
   }
 }
 ```
+
+### GET /user/profile
+
+This endpoint retrieves the profile of the authenticated user.
+
+#### Headers
+- **Authorization**: Bearer `<JWT_TOKEN>`  
+  (Replace `<JWT_TOKEN>` with the valid JWT token obtained during login)
+
+#### Response
+- **200 OK**: Returns the user's profile information.
+  ```json
+  {
+    "id": "user_id",
+    "email": "user@example.com",
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "createdAt": "2025-03-30T12:00:00.000Z"
+  }
+  ```
+- **401 Unauthorized**: If the token is missing or invalid.
+  ```json
+  {
+    "message": "Unauthorized"
+  }
+  ```
+
+#### Example Request
+```bash
+curl -X GET http://localhost:5000/user/profile \
+-H "Authorization: Bearer <JWT_TOKEN>"
+```
