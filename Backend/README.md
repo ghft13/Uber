@@ -236,3 +236,54 @@ This endpoint retrieves the profile of the authenticated user.
 curl -X GET http://localhost:5000/user/profile \
 -H "Authorization: Bearer <JWT_TOKEN>"
 ```
+
+### GET /user/logout
+
+This endpoint logs out the authenticated user by clearing the authentication token and blacklisting it.
+
+#### Headers
+- **Authorization**: Bearer `<JWT_TOKEN>`  
+  (Replace `<JWT_TOKEN>` with the valid JWT token obtained during login)
+
+#### Response
+
+##### Success (200 OK)
+If the user is successfully logged out:
+```json
+{
+  "message": "Logged Out"
+}
+```
+
+##### Error (401 Unauthorized)
+If the token is missing or invalid:
+```json
+{
+  "message": "Unauthorized"
+}
+```
+
+#### Example Request
+Using `curl`:
+```bash
+curl -X GET http://localhost:5000/user/logout \
+-H "Authorization: Bearer <JWT_TOKEN>"
+```
+
+Using JavaScript (Axios):
+```javascript
+const axios = require("axios");
+
+axios
+  .get("http://localhost:5000/user/logout", {
+    headers: {
+      Authorization: "Bearer <JWT_TOKEN>",
+    },
+  })
+  .then((response) => {
+    console.log(response.data);
+  })
+  .catch((error) => {
+    console.error(error.response.data);
+  });
+```

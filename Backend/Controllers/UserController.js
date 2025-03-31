@@ -1,8 +1,8 @@
 const { Message } = require("twilio/lib/twiml/MessagingResponse");
 const userModel = require("../Models/User_model");
 const userService = require("../Services/userservice");
-
 const { validationResult } = require("express-validator");
+const BlackListModel = require("../Models/BlackListModel");
 
 module.exports.registerUser = async (req, res, next) => {
   const errors = validationResult(req);
@@ -51,11 +51,20 @@ module.exports.LoginUser = async (req, res, next) => {
   }
   const token = user.generateAuthToken();
 
-  res.cookie("token",token);
+  res.cookie("token", token);
   res.status(200).json({ token, user });
 };
 
+module.exports.getUserProfile = async (req, res, next) => {
+  res.status(200).json({ user: req.user });
+};
 
-module.exports.getUserProfile=async(req,res,next)=>{
-    res.status(200).json({user:req.user})
-}
+module.exports.LogoutUSer = async (req, res, next) => {
+  res.clearCookie("token");
+
+  const token = req.cookies.token || req.headers.authorization.split(" ")[1];
+
+  await BlackListModel.create({ token });
+
+  res.status(200).json({ message: "Logged Out" });
+};
